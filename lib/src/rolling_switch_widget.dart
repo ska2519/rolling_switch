@@ -2,14 +2,13 @@ import 'dart:math' as math;
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:rolling_switch/src/controller/rolling_controller.dart';
+import 'package:rolling_switch/src/info/rolling_info.dart';
+import 'package:rolling_switch/src/transform/transform_icon.dart';
 import 'package:rolling_switch/src/transform/transform_text.dart';
-import 'package:tools_tkmonkey/tools_tkmonkey_flutter.dart';
-
-import 'controller/rolling_controller.dart';
-import 'info/rolling_info.dart';
-import 'transform/transform_icon.dart';
-import 'utils/drag_utils.dart';
-import 'widget/circular_container.dart';
+import 'package:rolling_switch/src/utils/drag_utils.dart';
+import 'package:rolling_switch/src/widget/circular_container.dart';
+import 'package:tools_tkmonkey/tools_tkmonkey.dart';
 
 /// {@template rolling_switch_widget}
 ///
@@ -91,10 +90,10 @@ class RollingSwitch extends StatefulWidget {
   /// [onChanged] is called when the user toggles the switch left or right
   final Function(bool) onChanged;
 
-  /// [rollingInfoLeft] configure the infor for the when icon is in left
+  /// [rollingInfoLeft] configure the info for the when icon is in left
   final RollingInfo rollingInfoLeft;
 
-  /// [rollingInfoRight] configure the infor for the when icon is in right
+  /// [rollingInfoRight] configure the info for the when icon is in right
   final RollingInfo rollingInfoRight;
 
   /// [initialState] determines whether this switch is left or right
@@ -151,15 +150,16 @@ class _RollingSwitchState extends State<RollingSwitch>
     initAllAnimation();
 
     dragUtils = DragUtils(
-        animationController: animationController,
-        maxSlide: widget.width - widget.innerSize - margin);
+      animationController: animationController,
+      maxSlide: widget.width - widget.innerSize - margin,
+    );
 
     turnState = widget.initialState;
     if (turnState) {
       animationController.value = 1;
     }
 
-    widget.controller?.addState = this;
+    widget.controller?.start();
   }
 
   @override
@@ -205,18 +205,23 @@ class _RollingSwitchState extends State<RollingSwitch>
                     animation: animationController,
                     builder: (_, child) => Transform.translate(
                       offset: Offset(
-                          dragUtils.maxSlide * animationController.value, 0),
+                        dragUtils.maxSlide * animationController.value,
+                        0,
+                      ),
                       child: child,
                     ),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Transform.rotate(
                         angle: lerpDouble(
-                            0, 2 * math.pi, animationController.value)!,
+                          0,
+                          2 * math.pi,
+                          animationController.value,
+                        )!,
                         child: CircularContainer(
                           size: widget.innerSize,
                           color: widget.circularColor,
-                          child: TransforRollingWidget(
+                          child: TransferRollingWidget(
                             animationOpacityLeft: animationOpacityLeft,
                             animationOpacityRight: animationOpacityRight,
                             innerSize: widget.innerSize,
@@ -252,9 +257,9 @@ class _RollingSwitchState extends State<RollingSwitch>
     );
 
     animationColor = ColorTween(
-            begin: widget.rollingInfoLeft.backgroundColor,
-            end: widget.rollingInfoRight.backgroundColor)
-        .animate(
+      begin: widget.rollingInfoLeft.backgroundColor,
+      end: widget.rollingInfoRight.backgroundColor,
+    ).animate(
       CurvedAnimation(
         parent: animationController,
         curve: const Interval(0.0, 1.0, curve: Curves.easeInOut),

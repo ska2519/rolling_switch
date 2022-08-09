@@ -7,8 +7,8 @@ import 'package:rolling_switch/src/widget/rolling_icon_widget.dart';
 /// This class transform the rollingInfo in a stack with [IconWidget] or [CustomIconWidget]
 ///
 /// {@endtemplate}
-class TransforRollingWidget extends StatelessWidget {
-  const TransforRollingWidget({
+class TransferRollingWidget extends StatelessWidget {
+  const TransferRollingWidget({
     Key? key,
     required this.rollingInfoRight,
     required this.rollingInfoLeft,

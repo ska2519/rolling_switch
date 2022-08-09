@@ -1,4 +1,4 @@
-import 'package:tools_tkmonkey/tools_tkmonkey_flutter.dart';
+import 'package:tools_tkmonkey/tools_tkmonkey.dart';
 
 /// {@template rolling_controller}
 ///
@@ -10,8 +10,8 @@ import 'package:tools_tkmonkey/tools_tkmonkey_flutter.dart';
 /// {@endtemplate}
 
 class RollingController extends TKMController
-    with StartFunction, GetPositionFunction {
-  void start() => startFunction();
+    with RunFunction, GetPositionFunction {
+  void start() => runFunction();
 
   double get drawerPosition => getPositionFunction;
 }
